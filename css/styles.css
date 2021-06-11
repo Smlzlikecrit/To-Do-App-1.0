@@ -1,0 +1,135 @@
+body{
+    background-color: #494D5F;
+    font-family: 'Roboto Slab', serif;
+}
+
+/* main container */
+.container {
+    display: flex;                     /* disable for mobile also works?*/
+    /* flex-direction: column;         use for mobile mediaqueries */
+    justify-content: space-around;
+    height: 700px;
+    width: 65%;
+    margin: 5% auto;
+}
+
+
+/* List Container */
+#header-to-do{
+    padding-left: 20%;
+    margin: 10% 0% 10% 20%
+}
+
+#task-list-container{
+    width: 100%;
+    background: rgb(243, 184, 184);
+    border: 2px solid yellow;
+    border-radius: 80px;
+}
+
+.list-item{
+    border: 2px solid green;
+    padding: 2% 2% 2% 2%;
+    margin-right: 5%;
+    position: relative;
+}
+
+ul{
+    list-style-type: none;
+}
+
+.icons{
+    position: absolute;
+    right: 5%;
+}
+
+/* Creation Container */
+#task-creation-container{
+    width: 100%;
+    height: 100%;
+    border: 2px solid green;
+    border-radius: 80px;
+}
+
+#header-add-task{
+    margin: 10% 0% 10% 30%;
+    color:  #e5eaf5;
+}
+
+#task-creation-form{
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    border: 2px solid red;
+    padding: 5% 10%;
+}
+
+#task-name{
+    background: #a0d2eb;
+    border: 0px;
+    border-radius: 5px;
+    margin: 1% 0% 3% 0%;
+    height: 25px;
+    width: 40%;
+    border-bottom: 1px solid #c5ecfd;
+
+}
+
+label{
+    color: #e5eaf5;
+}
+
+#due-date{
+    margin: 10px 0;
+    background: #a0d2eb;
+    border: 0px;
+    border-radius: 5px;
+    border-bottom: 2px solid #c5ecfd;
+    padding: 1%;
+    width: 40%;
+}
+
+#clear-button{
+    width: 49%;
+    display: inline-block;
+    height: 40px;
+    background-color:  #d0bdf4;
+    border-radius: 5px;
+    border: 0px;
+    box-shadow: 1px 1px #ad9ccc;
+    margin-right: 1%;
+}
+
+#add-task-button{
+    width: 49%;
+    float: right;
+    height: 40px;
+    background-color:  #d0bdf4;
+    border-radius: 5px;
+    border: 0px;
+    box-shadow: 1px 1px #ad9ccc;
+}
+
+.spans {
+    display: flex;
+    justify-content: center;
+}
+
+#mobile-submit-btn{
+    right: 0px;
+}
+
+#btn-div{
+    text-align: right;
+    border-radius: 5px;
+}
+
+/* Mobile media queries AddTask() */
+.fa-plus{
+    display: none;          /* disable for moblie media query size  & set #div-btn to display:none*/
+    border-radius: 5px;
+    height: 50px;
+    width: 50px;
+    background-color: #548e96;
+    color: white;
+}
