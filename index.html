@@ -13,18 +13,13 @@
 </head>
 <body>
     <div class="container">
-        <div id="task-list-container">
-            <h1 id="header-to-do">My Tasks: </h1>
-            <ul id="task-list">
-              
-            </ul>
-        </div>
+        
 
         <div id="task-creation-container">
             <h1 id="header-add-task">Add New Task</h1>
             <div id="task-creation-form">
                     <label for="task-name">Task Name: </label><br>
-                    <input type="text" name="task-name" id="task-name" required><br>
+                    <input type="text" name="task-name" id="task-name" maxlength="40" required><br>
                     <label for="due-date">Due Date:</label><br>
                     <input type="date" id="due-date" name="due-date" required>
                     <div class="button-container">
@@ -34,6 +29,12 @@
                     <div id="btn-div"><button type="submit" id="mobile-submit-btn" class="fas fa-plus"></button></div> 
                 </form>
             </div>
+        </div>
+        <div id="task-list-container">
+            <h1 id="header-to-do">My Tasks: </h1>
+            <ul id="task-list">
+              
+            </ul>
         </div>
     </div>
 </body> 

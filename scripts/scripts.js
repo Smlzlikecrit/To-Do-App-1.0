@@ -1,8 +1,4 @@
-// to do: 
-// 1. completed icon function
-// 2. edit function 
-// 3. delete function 
-// 4. render function
+
 document.addEventListener("load", render);
 let taskArray = []
 
@@ -39,18 +35,7 @@ function render(){
         //populate new <li> 
         document.getElementById(i).innerHTML = taskArray[i].name 
     }
-
-
 }
-
-
-function deleteTask(){
-    let iconContainer = document.getElementById("fa-trash-alt").parentNode;
-    var x = document.getElementById("myLI").parentNode.nodeName;
-    let parent = iconContainer.parentNode;
-    console.log(parent)
-}
-
 
 
 // ADDTASK FUNCTION
@@ -121,5 +106,78 @@ function addTask(e){
             document.getElementById("task-name").disabled = true;
         }
     }
+    completed()
 }
 
+
+
+// COMPLETED FUNCTION - Check circle
+
+function completed() {
+    document.querySelectorAll('.fa-check-circle').forEach(btn => {
+        btn.addEventListener("click", function(){
+            //getting parents of clicked item
+            let item = this.parentNode.parentNode
+            item.style.textDecoration = "line-through"
+        });
+    });
+}
+
+
+// EDIT FUNCTION
+
+function edit() {
+    document.querySelectorAll('.fa-edit').forEach(btn => {
+        btn.addEventListener("click", function(){
+            //getting parents of clicked item
+            let item = this.parentNode.parentNode
+            //populating input fields
+            document.getElementById("task-name").value = item.textContent
+
+
+            //test below getting values through saved array (safer + get due date):
+
+            // loop through array to find object with same itemId
+            // for(let i = 0; i < taskArray.length; i++){
+            //     if(taskArray[i].id == clickedItemId){
+            //         document.getElementById("task-name").innerHTML = taskArray[i].taskName
+            //         document.getElementById("due-date").innerHTML = taskArray[i].taskDueDate
+            //     };
+            // }         
+        });
+    });
+}
+
+//in EDIT():
+//change CLear Button to Cancel
+//Add task to - save?
+//run render()
+
+//DELETE FUNCTION
+
+document.querySelectorAll('.fa-trash-alt').forEach(btn => {
+    btn.addEventListener("click", remove)
+});
+function remove(){
+    let item = this.parentNode.parentNode
+    //get item.id
+    //loop through array for same id; taskArray[i].id == item.id
+    //remove object from taskArray
+    //save()
+}
+function deleteTask(){
+    let iconContainer = document.getElementById("fa-trash-alt").parentNode;
+    let x = document.getElementById("myLI").parentNode.nodeName;
+    let parent = iconContainer.parentNode;
+    console.log(parent)
+}
+
+
+
+//LOCAL STORAGE FUNCTIONs
+function store(){
+    localStorage.setItem("tasks", taskArray)
+}
+function retrieve(){
+    taskArray = localStorage.getItem("tasks")
+}
