@@ -1,5 +1,5 @@
 
-document.addEventListener("load", render);
+document.addEventListener("load", onload);
 let taskArray = []
 
 function render(){
@@ -43,7 +43,7 @@ document.getElementById("add-task-button").addEventListener("click", addTask)
 function addTask(e){
     e.preventDefault();
 
-    if(document.getElementById("task-name").value != ""){
+    if(document.getElementById("task-name").value != "" && document.getElementById("due-date").value != ""){
     //List creation
     // console.log(document.getElementById('task-list').childElementCount)
         if(document.getElementById('task-list').childElementCount <=8 ){
@@ -57,17 +57,18 @@ function addTask(e){
             newListItem.setAttribute("class", "list-item")
             let taskName = document.getElementById("task-name").value;
             let taskDueDate = document.getElementById("due-date").value;
-
+            //auto incrementing ID
+            let taskId = taskArray.length+1
             //saving input into object
             let taskObj = {
                 name: taskName,
                 dueDate: taskDueDate,
-                // id: x
+                id: taskId
             }
 
             //pushing object into global array
             taskArray.push(taskObj);
-            
+
             taskName = document.createTextNode(taskName);
             // taskDueDate = document.createTextNode(taskDueDate)
 
@@ -107,6 +108,8 @@ function addTask(e){
         }
     }
     completed()
+    edit()
+    remove()
 }
 
 
@@ -131,12 +134,15 @@ function edit() {
         btn.addEventListener("click", function(){
             //getting parents of clicked item
             let item = this.parentNode.parentNode
+            console.log(item.value)
             //populating input fields
             document.getElementById("task-name").value = item.textContent
-
+            document.getElementById("due-date").value = "2021-06-24"
 
             //test below getting values through saved array (safer + get due date):
 
+            // if(id == id){
+            //     splice
             // loop through array to find object with same itemId
             // for(let i = 0; i < taskArray.length; i++){
             //     if(taskArray[i].id == clickedItemId){
@@ -154,30 +160,31 @@ function edit() {
 //run render()
 
 //DELETE FUNCTION
-
+function remove() {
 document.querySelectorAll('.fa-trash-alt').forEach(btn => {
-    btn.addEventListener("click", remove)
-});
-function remove(){
-    let item = this.parentNode.parentNode
-    //get item.id
-    //loop through array for same id; taskArray[i].id == item.id
-    //remove object from taskArray
-    //save()
-}
-function deleteTask(){
-    let iconContainer = document.getElementById("fa-trash-alt").parentNode;
-    let x = document.getElementById("myLI").parentNode.nodeName;
-    let parent = iconContainer.parentNode;
-    console.log(parent)
+    btn.addEventListener("click", function(){
+        let item = this.parentNode.parentNode
+        console.log(item)
+        //get item.id
+        //loop through array for same id; taskArray[i].id == item.id
+        //remove object from taskArray
+        //save()
+        });
+    });
 }
 
 
+function onload(){
+    render()
+    completed()
+    edit()
+    remove()
+}
 
 //LOCAL STORAGE FUNCTIONs
-function store(){
-    localStorage.setItem("tasks", taskArray)
-}
-function retrieve(){
-    taskArray = localStorage.getItem("tasks")
-}
+// function store(){
+//     localStorage.setItem("tasks", JSON.stringify(taskArray))
+// }
+// function retrieve(){
+//     taskArray = JSON.parse(localStorage.getItem("tasks"))
+// }
