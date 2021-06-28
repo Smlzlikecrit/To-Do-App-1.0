@@ -1,8 +1,21 @@
 
-document.addEventListener("load", onload);
+// document.addEventListener("load", onload);
 let taskArray = []
+let editId = null
+
+//local storage functions
+function store(){
+    localStorage.setItem("tasks", JSON.stringify(taskArray))
+}
+function retrieve(){
+    taskArray = JSON.parse(localStorage.getItem("tasks"))
+}
 
 function render(){
+    //clearing list
+    const ulName = document.getElementById("task-list");
+    ulName.innerHTML = ""
+    //populate list
     taskArray = JSON.parse(localStorage.getItem("tasks"));
     for (let i = 0; i < taskArray.length; i++) {
         const newListItem = document.createElement("li");
@@ -12,15 +25,14 @@ function render(){
         newListItem.setAttribute("id", i)
         // append all objects to <UL>: const list = document.getElementById("task-list");
         // create all list items 
-        console.log("rendered task: " + taskArray[i].id)
         const spans = document.createElement("span");
         spans.setAttribute("class", "icons")
         const checkIcon = document.createElement("i");
-        checkIcon.setAttribute("class", "far fa-check-circle")
+        checkIcon.setAttribute("class", "far fa-check-circle icon-spacing")
         const editIcon = document.createElement("i");
-        editIcon.setAttribute("class", "fas fa-edit")
+        editIcon.setAttribute("class", "fas fa-edit icon-spacing")
         const deleteIcon = document.createElement("i");
-        deleteIcon.setAttribute("class", "fas fa-trash-alt")
+        deleteIcon.setAttribute("class", "fas fa-trash-alt icon-spacing")
         //appending icons
         spans.appendChild(checkIcon);
         spans.appendChild(editIcon);
@@ -79,11 +91,11 @@ function addTask(e){
             const spans = document.createElement("span");
             spans.setAttribute("class", "icons")
             const checkIcon = document.createElement("i");
-            checkIcon.setAttribute("class", "far fa-check-circle")
+            checkIcon.setAttribute("class", "far fa-check-circle icon-spacing")
             const editIcon = document.createElement("i");
-            editIcon.setAttribute("class", "fas fa-edit")
+            editIcon.setAttribute("class", "fas fa-edit icon-spacing")
             const deleteIcon = document.createElement("i");
-            deleteIcon.setAttribute("class", "fas fa-trash-alt")
+            deleteIcon.setAttribute("class", "fas fa-trash-alt icon-spacing")
 
             //appending icons
             spans.appendChild(checkIcon);
@@ -109,13 +121,12 @@ function addTask(e){
     }
     completed()
     edit()
-    remove()
+    assignRemoveButton()
+    store()
 }
 
 
-
 // COMPLETED FUNCTION - Check circle
-
 function completed() {
     document.querySelectorAll('.fa-check-circle').forEach(btn => {
         btn.addEventListener("click", function(){
@@ -126,65 +137,83 @@ function completed() {
     });
 }
 
+//Updating event listener of Add Task Button
+function updateEventListener(){
+    console.log("WORKING")
+    const newTaskName = document.getElementById("task-name").value
+    const newTaskDate = document.getElementById("due-date").value
+    for(i = 0; i < taskArray.length; i++){
+        if(editId == taskArray[i].id){
+            taskArray[i].name = newTaskName
+            taskArray[i].dueDate = newTaskDate
+            console.log("values updated")
+            console.log(taskArray)
+        }
+    }
+    //updating list for user
+    //insert render*() here
+    store()
+    //removing update eventlistener from add task button
+    const removeUpdateListener = document.getElementById("add-task-button")
+    removeUpdateListener.removeEventListener("click", updateEventListener)
+    //reassigning addTask() to add task button
+    const newAddTaskListener = document.getElementById("add-task-button")
+    newAddTaskListener.addEventListener("click", addTask)
+    newAddTaskListener.value = "Add Task"
+    document.getElementById("task-name").value = "";
+    document.getElementById("due-date").value = "";
+    
+}
 
 // EDIT FUNCTION
-
 function edit() {
     document.querySelectorAll('.fa-edit').forEach(btn => {
         btn.addEventListener("click", function(){
             //getting parents of clicked item
             let item = this.parentNode.parentNode
-            console.log(item.value)
             //populating input fields
-            document.getElementById("task-name").value = item.textContent
-            document.getElementById("due-date").value = "2021-06-24"
+            
+            for(i = 0; i < taskArray.length; i++){
+                if(taskArray[i].name == item.textContent){
+                    document.getElementById("task-name").value = taskArray[i].name
+                    document.getElementById("due-date").value = taskArray[i].dueDate
+                    editId = taskArray[i].id
+                }
+            }
+            //changing event listener of Add Task Button temporarily.removing addTask() eventlistener from add task button
+            const removeListenerAddButton = document.getElementById("add-task-button")
+            removeListenerAddButton.removeEventListener("click", addTask)
+            //assigning updateEventListener() to add task button
+            const newListenerButton = document.getElementById("add-task-button")
+            newListenerButton.addEventListener("click", updateEventListener)
 
-            //test below getting values through saved array (safer + get due date):
-
-            // if(id == id){
-            //     splice
-            // loop through array to find object with same itemId
-            // for(let i = 0; i < taskArray.length; i++){
-            //     if(taskArray[i].id == clickedItemId){
-            //         document.getElementById("task-name").innerHTML = taskArray[i].taskName
-            //         document.getElementById("due-date").innerHTML = taskArray[i].taskDueDate
-            //     };
-            // }         
+            newListenerButton.value = "Update Task"
         });
     });
+   
 }
 
-//in EDIT():
-//change CLear Button to Cancel
-//Add task to - save?
-//run render()
 
 //DELETE FUNCTION
-function remove() {
-document.querySelectorAll('.fa-trash-alt').forEach(btn => {
-    btn.addEventListener("click", function(){
-        let item = this.parentNode.parentNode
-        console.log(item)
-        //get item.id
-        //loop through array for same id; taskArray[i].id == item.id
-        //remove object from taskArray
-        //save()
+function assignRemoveButton() {
+    document.querySelectorAll('.fa-trash-alt').forEach(btn => {
+        btn.addEventListener("click", function(){
+            const selectedItem = this.parentNode.parentNode
+            console.log(selectedItem.textContent)
+            
+            for(i = 0; i < taskArray.length; i++){
+                if(taskArray[i].name == selectedItem.textContent){
+                    const index = taskArray.indexOf(taskArray[i])
+                    taskArray.splice(index, 1)
+                    const removeableItem = document.getElementById("task-list")
+                    removeableItem.removeChild(selectedItem)
+                    console.log(taskArray)
+                    localStorage.setItem("tasks", JSON.stringify(taskArray))                   
+                } else {
+                    console.log("error")  
+                }
+            }
+            
+            });
         });
-    });
 }
-
-
-function onload(){
-    render()
-    completed()
-    edit()
-    remove()
-}
-
-//LOCAL STORAGE FUNCTIONs
-// function store(){
-//     localStorage.setItem("tasks", JSON.stringify(taskArray))
-// }
-// function retrieve(){
-//     taskArray = JSON.parse(localStorage.getItem("tasks"))
-// }

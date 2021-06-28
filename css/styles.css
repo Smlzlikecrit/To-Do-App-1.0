@@ -47,6 +47,11 @@ ul{
     position: absolute;
     right: 5%;
 }
+
+.icon-spacing{
+    padding: 0 5px;
+}
+
 #task-list{
     padding-bottom: 10%;
 }
