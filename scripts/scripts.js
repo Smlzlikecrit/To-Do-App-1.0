@@ -1,5 +1,5 @@
 
-// document.addEventListener("load", onload);
+
 let taskArray = []
 let editId = null
 
@@ -10,7 +10,13 @@ function store(){
 function retrieve(){
     taskArray = JSON.parse(localStorage.getItem("tasks"))
 }
-
+function loadButtons(){
+    assignRemoveButton()
+    edit()
+    completed()
+}
+retrieve()
+render()
 function render(){
     //clearing list
     const ulName = document.getElementById("task-list");
@@ -19,10 +25,11 @@ function render(){
     taskArray = JSON.parse(localStorage.getItem("tasks"));
     for (let i = 0; i < taskArray.length; i++) {
         const newListItem = document.createElement("li");
-        
+        newListItem.textContent = taskArray[i].name
         newListItem.setAttribute("class", "list-item")
         // create incrementing ID for each task in above data variable
         newListItem.setAttribute("id", i)
+        
         // append all objects to <UL>: const list = document.getElementById("task-list");
         // create all list items 
         const spans = document.createElement("span");
@@ -44,9 +51,8 @@ function render(){
         const listOfTasks = document.getElementById('task-list');
         listOfTasks.appendChild(newListItem);
 
-        //populate new <li> 
-        document.getElementById(i).innerHTML = taskArray[i].name 
     }
+    loadButtons()
 }
 
 
@@ -119,9 +125,7 @@ function addTask(e){
             document.getElementById("task-name").disabled = true;
         }
     }
-    completed()
-    edit()
-    assignRemoveButton()
+    loadButtons()
     store()
 }
 
@@ -139,7 +143,6 @@ function completed() {
 
 //Updating event listener of Add Task Button
 function updateEventListener(){
-    console.log("WORKING")
     const newTaskName = document.getElementById("task-name").value
     const newTaskDate = document.getElementById("due-date").value
     for(i = 0; i < taskArray.length; i++){
@@ -151,8 +154,9 @@ function updateEventListener(){
         }
     }
     //updating list for user
-    //insert render*() here
     store()
+    render()
+    
     //removing update eventlistener from add task button
     const removeUpdateListener = document.getElementById("add-task-button")
     removeUpdateListener.removeEventListener("click", updateEventListener)
@@ -188,6 +192,7 @@ function edit() {
             newListenerButton.addEventListener("click", updateEventListener)
 
             newListenerButton.value = "Update Task"
+            
         });
     });
    
@@ -199,7 +204,6 @@ function assignRemoveButton() {
     document.querySelectorAll('.fa-trash-alt').forEach(btn => {
         btn.addEventListener("click", function(){
             const selectedItem = this.parentNode.parentNode
-            console.log(selectedItem.textContent)
             
             for(i = 0; i < taskArray.length; i++){
                 if(taskArray[i].name == selectedItem.textContent){
@@ -207,10 +211,7 @@ function assignRemoveButton() {
                     taskArray.splice(index, 1)
                     const removeableItem = document.getElementById("task-list")
                     removeableItem.removeChild(selectedItem)
-                    console.log(taskArray)
                     localStorage.setItem("tasks", JSON.stringify(taskArray))                   
-                } else {
-                    console.log("error")  
                 }
             }
             
